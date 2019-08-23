@@ -1,6 +1,5 @@
 package common.filter.wrapper;
 
-
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,15 +20,16 @@ public class EncryptWrapper extends HttpServletRequestWrapper{
 		String value = "";
 		
 		// 패스워드 일때만 암호화 처리
-		if(name !=null && name.equals("password")) {
+		if(name !=null && name.equals("password") || name.equals("passwordNew")) {
 			super.getParameter(name); // client value
 			value = getSha2(super.getParameter(name));
-			System.out.println("암호화된 비번 : " + value);
+//			System.out.println("암호화된 비번 : " + value);
 			return value;
 		}else {
 			return super.getParameter(name);
 		}
 	}
+	
 	
 	private String getSha2(String val) {
 		

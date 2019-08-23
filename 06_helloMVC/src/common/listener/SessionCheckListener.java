@@ -15,19 +15,19 @@ public class SessionCheckListener implements HttpSessionListener, HttpSessionAtt
 
     @Override
 	public void attributeAdded(HttpSessionBindingEvent event) {
-    	System.out.println("attr session create");
+//    	System.out.println("attr session create");
 		
 	}
 
 	@Override
 	public void attributeRemoved(HttpSessionBindingEvent event) {
-		System.out.println("attr session remove");
+//		System.out.println("attr session remove");
 		
 	}
 	
 	@Override
 	public void attributeReplaced(HttpSessionBindingEvent event) {
-		System.out.println("sttr session replace");
+//		System.out.println("sttr session replace");
 		
 	}
 

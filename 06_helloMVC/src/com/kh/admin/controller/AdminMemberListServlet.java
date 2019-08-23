@@ -1,6 +1,8 @@
-package com.kh.member.controller;
+package com.kh.admin.controller;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,18 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.member.model.services.MemberService;
+import com.kh.member.model.vo.Member;
 
 /**
- * Servlet implementation class MemberDeleteServlet
+ * Servlet implementation class AdminMemberListServlet
  */
-@WebServlet("/member/memberDelete")
-public class MemberDeleteServlet extends HttpServlet {
+@WebServlet("/admin/memberList")
+public class AdminMemberListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MemberDeleteServlet() {
+    public AdminMemberListServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,27 +31,21 @@ public class MemberDeleteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//맴버 탈퇴
 		
-		MemberService service = new MemberService();
+		Member loginMember = (Member)request.getSession().getAttribute("loginMember");
 		
-		int ck = service.memberDelete(request.getParameter("userId"));
-		
-		String msg = "";
-		String loc = "/";
-		
-		if(ck>0) {
-			msg = "탈퇴 됨";
-			loc = "/logout.do";
-		}else {
-			msg = "탈퇴 안됨";
-			loc = "/mypage?userId=" + request.getParameter("userId");
+		if(loginMember == null || !loginMember.getUserId().equals("admin")) {
+			request.setAttribute("msg", "잘못된 경로로 접근하셨습니다");
+			request.setAttribute("local", "/");
+			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+			return;
 		}
-	
-		request.setAttribute("msg", msg);
-		request.setAttribute("local", loc);
-		request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		
+		List<Member> list = new MemberService().selectList();
+		
+		// view 페이지 데이터 전송
+		request.setAttribute("members", list);
+		request.getRequestDispatcher("/views/admin/memberList.jsp").forward(request, response);
 	}
 
 	/**

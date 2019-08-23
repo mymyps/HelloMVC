@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.kh.member.model.services.MemberService;
 
+
 /**
  * Servlet implementation class UpdatePasswordEndServleit
  */
-@WebServlet("/member/updatePasswordEnd")
+@WebServlet(name="updatePassword", urlPatterns="/member/updatePasswordEnd")
 public class UpdatePasswordEndServleit extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -22,6 +23,7 @@ public class UpdatePasswordEndServleit extends HttpServlet {
     public UpdatePasswordEndServleit() {
         super();
         // TODO Auto-generated constructor stub
+        
     }
 
 	/**
@@ -33,7 +35,31 @@ public class UpdatePasswordEndServleit extends HttpServlet {
 		String password = request.getParameter("password");
 		String passwordNew = request.getParameter("passwordNew");
 		
-//		int ck = MemberService().updatePassword(userId, password, passwordNew);
+		int ck = new MemberService().updatePassword(userId, password, passwordNew);
+		String msg = "";
+		String loc = "/member/updatePassword";
+		String msgClose = "self.close()";
+		
+		switch (ck) {
+		case 0:
+			msg = "패스워드 수정에 실패했습니다.";
+			break;
+		case -1:
+			msg = "현재 패스워드가 일치하지 않습니다.";
+			break;
+		default:
+			msg = "패스워드 수정완료";
+			request.setAttribute("msgClose", msgClose);
+			break;
+		}//switch
+		
+		request.setAttribute("msg", msg);
+		request.setAttribute("local", loc);
+		request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+		
+		
+		
+		
 		
 	}
 
