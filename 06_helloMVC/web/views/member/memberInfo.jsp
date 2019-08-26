@@ -34,6 +34,7 @@
 %>
 
 <%@ include file="/views/common/header.jsp"%>
+
 <section id="enroll-container">
 	<div>
 		<h2>회원 정보수정</h2>

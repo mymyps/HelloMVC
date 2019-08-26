@@ -8,11 +8,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import com.kh.member.model.vo.Member;
+import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 
 public class MemberDao {
 
@@ -304,4 +306,150 @@ public class MemberDao {
 		return list;
 	}
 	
+	//page
+	public int selectCountMember(Connection conn) {
+		
+		PreparedStatement stmt = null;
+		int ck = 0;
+		ResultSet rs = null;
+		String sql = prop.getProperty("selectCountMember");
+		try {
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				ck = rs.getInt("cnt");
+//				ck = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		
+		return ck;
+		
+	}
+	
+	
+	//page list
+	public List<Member> selectListPage(Connection conn, int cPage, int numPerPage){
+	
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = prop.getProperty("selectListPage");
+		List<Member> list = new ArrayList<Member>();
+		Member m = null;
+		
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, (cPage - 1)*numPerPage + 1); // 하단페이지
+			stmt.setInt(2, cPage*numPerPage);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				m = new Member();
+				m.setUserId(rs.getString("userid"));
+				m.setPassword(rs.getString("password"));
+				m.setUsreName(rs.getString("username"));
+				m.setGender(rs.getString("gender").charAt(0));
+				m.setAge(rs.getInt("age"));
+				m.setEmail(rs.getString("email"));
+				m.setPhone(rs.getString("phone"));
+				m.setAddress(rs.getString("address"));
+				m.setHobby(rs.getString("hobby"));
+				m.setEnrollDate(rs.getDate("enrolldate"));
+				
+				list.add(m);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		
+		return list;
+	}
+	
+	// 회원 검색 처리하기
+	public int selectCountFinder(Connection conn, String type, String key) {
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		int ck = 0;
+		String sql="select count(*) as cnt from member where "+type+" like '%"+key+"%'";
+		
+//		String sql = "select count as cnt from member where "+ type + " like '%" + key + "%'";
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if(rs.next()) {
+				ck = rs.getInt("cnt");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		
+		return ck;
+	}
+	
+	
+	public List<Member> selectListFinder(Connection conn, String type, String key, int curPage, int numPerPage) {
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		List<Member> list = new ArrayList<Member>();
+		Member m = null;
+		int start = (curPage - 1) * numPerPage + 1;
+		int end = curPage * numPerPage;
+		
+//		String sql = "select * from ("
+//				+ "select rownum as rnum, a.* from ("
+//				+ "select * from member where "
+//				+ type + " like '%" + key + "%')a) "
+//				+ "where rnum between " + start + " and " + end;
+		String sql="select * from ("
+				+ "select rownum as rnum, a.* from("
+				+ "select * from member where "
+				+ type+" like '%"+key+"%' )a) "
+				+ "where rnum between "+start+" and "+end;
+		
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				m = new Member();
+				m.setUserId(rs.getString("userid"));
+				m.setPassword(rs.getString("password"));
+				m.setUsreName(rs.getString("username"));
+				m.setGender(rs.getString("gender").charAt(0));
+				m.setAge(rs.getInt("age"));
+				m.setEmail(rs.getString("email"));
+				m.setPhone(rs.getString("phone"));
+				m.setAddress(rs.getString("address"));
+				m.setHobby(rs.getString("hobby"));
+				m.setEnrollDate(rs.getDate("enrolldate"));
+				
+				list.add(m);
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		
+		return list;
+		
+	}
 }

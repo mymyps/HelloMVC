@@ -40,12 +40,66 @@ public class AdminMemberListServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 			return;
 		}
+		/* ************************************* */
+		// 페이징 처리 
+		int cPage; //현재 client가 보고있는 페이지
+		try {
+			cPage = Integer.parseInt(request.getParameter("cPage"));
+		} catch (NumberFormatException e) {
+			cPage = 1; // 0이나 숫자로 볼수 없는 값은 1로
+		}
 		
-		List<Member> list = new MemberService().selectList();
+		int numPerPage = 5; // 페이지당 출력되는 페이지수
+		// DB에서 데이터 현황, 필요한 데이터만큼만 조회해서 가져옴
+		int totalMember = new MemberService().selectCountMember(); //데이터 총 현황을 가져옴
+		List<Member> list = new MemberService().selectListPage(cPage, numPerPage); // 받을 데이터 예)5개씩
+		
+		
+		//pageBar 구성! 구성하는 문자열 작성
+		String pageBar = "";
+		int totalPage = (int)Math.ceil((double)totalMember / numPerPage );
+		int pageSizeBar = 5;
+		int pageNo = ((cPage-1)/pageSizeBar) * pageSizeBar + 1;
+		int pageEnd = pageNo + pageSizeBar - 1;
+		
+		if(pageNo == 1) {
+			pageBar += "<span>[이전]</span>";
+		}else {
+			pageBar += "<a href = " + request.getContextPath() + "/admin/memberList?cPage=" + (pageNo - 1)+">[이전]"+"</a>";
+		}
+		
+		while(!(pageNo>pageEnd || pageNo>totalPage)) {
+			if(pageNo == cPage) {
+				pageBar += "<span class='cPage'>"+ pageNo + "</span>";
+			}
+			else {
+				pageBar += "<a href = " + request.getContextPath() + "/admin/memberList?cPage=" + pageNo + ">" + pageNo + "</a>";
+			}
+			pageNo++;
+
+		}
+		
+		if(pageNo>totalPage) {
+			pageBar += "<span>[다음]</span>";
+		}else {
+			pageBar += "<a href = " + request.getContextPath() + "/admin/memberList?cPage=" + (pageNo)+">[다음]"+"</a>";
+		}
+		
+		
+		
+		
+		
+		/* ************************************* */
+//		List<Member> list = new MemberService().selectList();
 		
 		// view 페이지 데이터 전송
+		request.setAttribute("pageBar", pageBar); //page
+		request.setAttribute("cPage", cPage); //page
+
 		request.setAttribute("members", list);
 		request.getRequestDispatcher("/views/admin/memberList.jsp").forward(request, response);
+		
+		
 	}
 
 	/**

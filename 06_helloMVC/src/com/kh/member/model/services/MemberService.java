@@ -144,4 +144,49 @@ public class MemberService {
 		
 		return list;
 	}
+	
+	// page
+	public int selectCountMember() {
+		
+		Connection conn = JDBCtemplate.getConnection();
+		int count = mDao.selectCountMember(conn);
+		
+		JDBCtemplate.close(conn);
+		
+		return count;
+	}
+	
+	// page list 
+	public List<Member> selectListPage(int cPage, int numPerPage){
+		
+		Connection conn = JDBCtemplate.getConnection();
+		List<Member> list = mDao.selectListPage(conn, cPage, numPerPage);
+		
+		JDBCtemplate.close(conn);
+		
+		return list;
+	}
+	
+	// 회원 검색 처리하기
+	//admin page
+	public int selectCountFinder(String type, String key) {
+		
+		Connection conn = JDBCtemplate.getConnection();
+		int count = mDao.selectCountFinder(conn, type, key);
+		
+		JDBCtemplate.close(conn);
+		return count;
+	}
+	
+	//admin page list
+	public List<Member> selectListFinder(String type, String key, int curPage, int numPerPage) {
+		
+		Connection conn = JDBCtemplate.getConnection();
+		List<Member> list = mDao.selectListFinder(conn, type, key, curPage, numPerPage);
+		
+		JDBCtemplate.close(conn);
+		return list;
+	}
+
+
 }
