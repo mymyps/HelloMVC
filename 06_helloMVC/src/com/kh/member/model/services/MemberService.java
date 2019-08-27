@@ -187,6 +187,6 @@ public class MemberService {
 		JDBCtemplate.close(conn);
 		return list;
 	}
-
+	
 
 }

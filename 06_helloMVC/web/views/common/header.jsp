@@ -99,7 +99,7 @@
                     <a href="<%=request.getContextPath()%>">Home</a>
                 </li>
                 <li id="notice">
-                    <a href="#">공지사항</a>
+                    <a href="<%=request.getContextPath()%>/notice/noticeList">공지사항</a>
                 </li>
                 <li>
                     <a href="#">게시판</a>

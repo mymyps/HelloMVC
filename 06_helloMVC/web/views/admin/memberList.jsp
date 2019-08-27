@@ -125,7 +125,9 @@ section#memberList-container form#numPerPageFrm {
 				<%if(members!=null&&!members.isEmpty()){
 					for(Member m: members){ %>
 					<tr>
-						<td><%=m.getUserId()%></td>
+						<td>
+							<a href="<%=request.getContextPath()%>/mypage.do?userId=<%=m.getUserId()%>"><%=m.getUserId()%></a>
+						</td>
 						<td><%=m.getUsreName()%></td>
 						<td><%=m.getGender()=='M'?"남":"여"%></td>
 						<td><%=m.getAge()%></td>

@@ -72,14 +72,16 @@ public class AdminMemberFinderServlet extends HttpServlet {
 						+ "&searchType=" + type + "&searchKeyword=" + keyword
 						+ "'>"+ pageSt +"</a>";
 			}
+			pageSt++;
 		}
 		
-		if(pageSt > totalPage) {
-			pageBar += "<span>[다음]</span>";
+		if(pageSt>totalPage) {
+			pageBar+="<span>[다음]</span>";
 		}else {
-			pageBar += "<a href = '" + request.getContextPath() + "/admin/memberFinder?cPage=" + (pageSt)
-					+ "&searchType=" + type + "&searchKeyword=" + keyword
-					+ "'>[다음]</a>";
+			pageBar+="<a href='"+request.getContextPath()
+			+"/admin/memberFinder?cPage="+(pageSt)
+			+"&searchType="+type+"&searchKeyword="+keyword
+			+"'>[다음]</a>";
 		}
 		
 		request.setAttribute("pageBar", pageBar);

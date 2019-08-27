@@ -16,6 +16,8 @@ import java.util.Properties;
 import com.kh.member.model.vo.Member;
 import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 
+import common.template.JDBCtemplate;
+
 public class MemberDao {
 
 	private Properties prop = new Properties();
@@ -452,4 +454,5 @@ public class MemberDao {
 		return list;
 		
 	}
+	
 }
