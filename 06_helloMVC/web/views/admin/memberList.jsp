@@ -154,6 +154,8 @@ section#memberList-container form#numPerPageFrm {
 		var sname = $("#search-userName");
 		var sgender = $("#search-gender");
 		var searchType = $("#searchType");
+
+
 		searchType.change(function() {
 			sid.hide();
 			sname.hide();
@@ -161,6 +163,8 @@ section#memberList-container form#numPerPageFrm {
 			$("#search-" + this.value).css("display", "inline-block");
 		});
 		$('#searchType').trigger('change');
+
+
 	});
 </script>
 	
