@@ -5,8 +5,7 @@
     <section id="content">
     	<div>
         	<h1>content영역</h1>
-        	test
-        	
+
        	</div>
 	</section>
 	
