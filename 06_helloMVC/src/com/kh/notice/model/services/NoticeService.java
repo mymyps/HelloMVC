@@ -51,11 +51,18 @@ public class NoticeService {
 		Connection conn = JDBCtemplate.getConnection();
 		int result = nDao.insertNotice(conn, n);
 		
-		if(result > 0)
+		if(result > 0) {
+//			for() {
+//				result = dao.insertAttachment(conn, list.get(i));
+//				if(result < 0) break;
+//			}
+			
 			JDBCtemplate.commit(conn);
-		else
+			result = nDao.selectSeqNotice(conn);
+		}
+		else {
 			JDBCtemplate.rollback(conn);
-		
+		}
 		JDBCtemplate.close(conn);
 		return result;
 	}

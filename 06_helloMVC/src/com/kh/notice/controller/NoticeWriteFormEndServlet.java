@@ -86,9 +86,11 @@ public class NoticeWriteFormEndServlet extends HttpServlet {
 		
 		String msg = "";
 		String local = "";
+		
 		if(result > 0) {
 			msg = "공지사항 등록 완료";
-			local = "/notice/noticeList";
+//			local = "/notice/noticeList";
+			local = "/notice/noticeView?no=" + result;
 		}else {
 			msg = "공지사항 등록 실패";
 			local = "/notice/noticeForm";

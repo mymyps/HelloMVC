@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -151,4 +152,31 @@ public class NoticeDao {
 		return ck;
 	}
 
+	// seq
+	public int selectSeqNotice(Connection conn) {
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		int ck = 0;
+		String sql = "select seq_notice_no.currval from dual";
+		
+		try {
+			
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if(rs.next()) {
+				ck = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		
+		return ck;
+	}
+	
+	
 }
