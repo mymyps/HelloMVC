@@ -6,6 +6,7 @@
 <%
 	List<Board> list = (List)request.getAttribute("board");
 	String pageBar = (String)request.getAttribute("pageBar");
+	int cpage = (int)request.getAttribute("cPage");
 %>
 <%@ include file="/views/common/header.jsp"%>
 <style>
@@ -51,7 +52,9 @@ div#pageBar span.cPage {
 <!-- 보드 -->
 <section id="board-container">
 	<h2>게시판</h2>
+	<%if(memberLogin != null){ %>
 	<input type="button" value="글쓰기" id="btn-add" onclick="writeNotice()"/>
+	<%} %>
 	<table id="tbl-board">
 		<tr>
 			<th>번호</th>

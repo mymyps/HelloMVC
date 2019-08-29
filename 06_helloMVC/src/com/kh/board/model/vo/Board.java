@@ -29,6 +29,15 @@ public class Board {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Board(String boardTitile, String boardWriter, String boardContent, String boardOriginalFileName,
+			String boardRenamedFileName) {
+		super();
+		this.boardTitile = boardTitile;
+		this.boardWriter = boardWriter;
+		this.boardContent = boardContent;
+		this.boardOriginalFileName = boardOriginalFileName;
+		this.boardRenamedFileName = boardRenamedFileName;
+	}
 
 	public Board(int boardNo, String boardTitile, String boardWriter, String boardContent, String boardOriginalFileName,
 			String boardRenamedFileName, Date boardDate, int boardReadCount) {
@@ -42,7 +51,6 @@ public class Board {
 		this.boardDate = boardDate;
 		this.boardReadCount = boardReadCount;
 	}
-
 
 	public int getBoardNo() {
 		return boardNo;

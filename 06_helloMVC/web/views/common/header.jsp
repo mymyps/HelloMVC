@@ -51,7 +51,7 @@
                     <tr>
                         <td>
                             <input type="text" name="userId" id="userId"
-                            placeholder="비밀번호" value="<%=saveId!=null?saveId:""%>"/>
+                            placeholder="아이디" value="<%=saveId!=null?saveId:""%>"/>
                         </td>
                         <td></td>
                     </tr>

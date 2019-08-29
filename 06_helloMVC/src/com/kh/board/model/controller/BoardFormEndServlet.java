@@ -1,5 +1,6 @@
 package com.kh.board.model.controller;
 
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +15,8 @@ import com.kh.board.model.vo.Board;
 import com.kh.notice.model.services.NoticeService;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+
+import common.fileRename.MyFileRenamePolicy;
 
 /**
  * Servlet implementation class BoardFormEndServlet
@@ -42,21 +45,19 @@ public class BoardFormEndServlet extends HttpServlet {
 		}
 		
 		String root = getServletContext().getRealPath("/");
-		String saveDir = root + "upload/board";
+		String saveDir = root + "upload"+ File.separator +"board";
 		int maxSize = 1024 * 1024 * 10;
 		
-		MultipartRequest mr = new MultipartRequest(request, saveDir, maxSize, "UTF-8", new DefaultFileRenamePolicy());
+		MultipartRequest mr = new MultipartRequest(request, saveDir, maxSize, "UTF-8", new MyFileRenamePolicy());
 		
 		String title = mr.getParameter("title");
 		String writer = mr.getParameter("writer");
 		String content = mr.getParameter("content");
 		
-		
-		
 		String fileName = mr.getFilesystemName("up_file");
-		System.out.println("111111111111" + fileName);
-		System.out.println("222222222222" + request.getParameter("up_file"));
-		Board b = new Board(0, title, writer, content, null, fileName, null, 1);
+		String fileOriName = mr.getOriginalFileName("up_file");
+		Board b = new Board(title, writer, content, fileOriName, fileName);
+//		Board b1 = new Board(0, title, writer, content, fileOriName, fileName, null, 1);
 		
 		int ck = new BoardService().insertBoard(b);
 		
@@ -67,8 +68,10 @@ public class BoardFormEndServlet extends HttpServlet {
 			msg = "게시글 등록 완료";
 			local = "/board/boardView?no=" + ck;
 		}else {
+			File remove = new File(saveDir + "/" + b.getBoardRenamedFileName());
+			remove.delete();
 			msg = "게시글 등록 실패";
-			local = "/board/boardForm";
+			local = "/board/boardList";
 		}
 		
 		request.setAttribute("msg", msg);

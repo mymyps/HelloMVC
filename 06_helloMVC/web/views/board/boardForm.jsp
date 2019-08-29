@@ -48,7 +48,7 @@ table#tbl-notice td {
 				<tr>
 					<th>작성자</th>
 					<td><input type="text" name="writer"
-						value="" readonly /></td>
+						value="<%=memberLogin.getUserId()%>" readonly /></td>
 						<%-- <%=memberLogin.getUserId()%> --%>
 				</tr>
 				<tr>

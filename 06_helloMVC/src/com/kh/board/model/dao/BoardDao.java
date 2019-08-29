@@ -6,13 +6,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.BoardComment;
 
 import static common.template.JDBCtemplate.close;
+import static common.template.JDBCtemplate.getConnection;
 
 public class BoardDao {
 	
@@ -106,7 +109,7 @@ public class BoardDao {
 			stmt.setInt(1, no);
 			rs = stmt.executeQuery();
 			
-			while (rs.next()) {
+			if (rs.next()) {
 				b = new Board();
 				b.setBoardNo( rs.getInt("board_no") );
 				b.setBoardTitile(rs.getString("board_title"));
@@ -155,5 +158,80 @@ public class BoardDao {
 		}
 		return ck;
 	}
+	
+	public int insertBoardSelectNum(Connection conn) {
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		int ck = 0;
+		String sql = "select seq_board_no.currval from dual";
+		
+		try {
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				ck = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		return ck;
+	}
 
+	public int updateCount(Connection conn, int no) {
+		
+		Statement stmt = null;
+		int ck = 0;
+		String sql = "update board set board_readcount = board_readcount+1 where board_no="+ no;
+		
+		try {
+			stmt = conn.createStatement();
+			ck = stmt.executeUpdate(sql);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(stmt);
+		}
+		
+		return ck;
+	}
+	
+
+	public int insertComment(Connection conn, BoardComment bc) {
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = prop.getProperty("insertComment");
+		int ck = 0;
+		
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, bc.getBoardCommentLevel());
+			stmt.setString(2, bc.getBoardCommentWriter());
+			stmt.setString(3, bc.getBoardCommentContent());
+			stmt.setInt(4, bc.getBoardRef());
+			stmt.setString(5, bc.getBoardCommentRef()==0?null:String.valueOf(bc.getBoardCommentRef()));
+			
+			ck = stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		
+		return ck;
+	}
+
+	
+	
+	
+	
 }

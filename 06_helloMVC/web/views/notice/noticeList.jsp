@@ -1,4 +1,4 @@
-ㅌ<%@page import="com.kh.notice.model.vo.Notice"%>
+<%@page import="com.kh.notice.model.vo.Notice"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>

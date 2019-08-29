@@ -46,8 +46,11 @@ public class BoardListServlet extends HttpServlet {
 		
 		int totalPage = (int)Math.ceil( (double)totalBoard / numPerPage );
 		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// 템플릿 처리로 할 수 있음
+		// pageSizeBar, cPage, /board/boardList(경로), totalpage
 		String pageBar = "";
-		int pageSizeBar = 5;
+		int pageSizeBar = 5; 
 		int pageNo = ((cPage - 1)/pageSizeBar) * pageSizeBar + 1;
 		int pageEnd = pageNo + pageSizeBar - 1;
 		
@@ -69,6 +72,7 @@ public class BoardListServlet extends HttpServlet {
 		}else
 			pageBar += "<a href = '" + request.getContextPath() + "/board/boardList?cPage=" + pageNo + "'>[다음]</a>";
 		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		request.setAttribute("pageBar", pageBar);
 		request.setAttribute("cPage", cPage);
 		request.setAttribute("board", list);
