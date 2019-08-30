@@ -8,19 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.board.model.services.BoardService;
-import com.kh.board.model.vo.BoardComment;
 
 /**
- * Servlet implementation class BoardCommentWriteServlet
+ * Servlet implementation class BoardCommentDeleteServlet
  */
-@WebServlet("/boardComment/commentInsert")
-public class BoardCommentWriteServlet extends HttpServlet {
+@WebServlet("/board/boardCommentDelete")
+public class BoardCommentDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardCommentWriteServlet() {
+    public BoardCommentDeleteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,24 +28,19 @@ public class BoardCommentWriteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		int boardRef=Integer.parseInt(request.getParameter("no"));
+		int commentNo=Integer.parseInt(request.getParameter("commentNo"));
 		
-		int boardRef = Integer.parseInt(request.getParameter("boardRef"));
-		String content = request.getParameter("boardCommentContent");
-		String boardWriter = request.getParameter("boardCommentWriter");
-		int boardLevel = Integer.parseInt(request.getParameter("boardCommentLevel"));
-		int commentRef = Integer.parseInt(request.getParameter("boardCommentRef"));
-		
-		BoardComment bc = new BoardComment(boardLevel, boardWriter, content, boardRef, commentRef);
-		int ck = new BoardService().insertComment(bc);
-		
-		String msg = "";
-		String local = "/board/boardView?no=" + boardRef;
-		String view = "/views/common/msg.jsp";
-		msg = ck>0?"댓글등록 성공":"댓글등록 실패";
-		
+		int result=new BoardService().deleteComment(boardRef,commentNo);
+		String loc="/board/boardView?no="+boardRef;
+		String msg=result>0?"댓글삭제완료":"댓글삭제실패";
+		String view="/views/common/msg.jsp";
 		request.setAttribute("msg", msg);
-		request.setAttribute("local", local);
-		request.getRequestDispatcher(view).forward(request, response);
+		request.setAttribute("local", loc);
+		request.getRequestDispatcher(view).forward(request,response);
+		
+		
 		
 	}
 
@@ -59,3 +53,32 @@ public class BoardCommentWriteServlet extends HttpServlet {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

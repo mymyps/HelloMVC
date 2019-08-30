@@ -11,17 +11,17 @@ import com.kh.board.model.services.BoardService;
 import com.kh.board.model.vo.BoardComment;
 
 /**
- * Servlet implementation class BoardCommentWriteServlet
+ * Servlet implementation class BoardCommentInsertServlet
  */
-@WebServlet("/boardComment/commentInsert")
-public class BoardCommentWriteServlet extends HttpServlet {
+@WebServlet("/board/boardCommentInsert")
+public class BoardCommentInsertServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardCommentWriteServlet() {
-        super();
+    public BoardCommentInsertServlet() {
+        super(); 
         // TODO Auto-generated constructor stub
     }
 
@@ -30,13 +30,16 @@ public class BoardCommentWriteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int boardRef = Integer.parseInt(request.getParameter("boardRef"));
-		String content = request.getParameter("boardCommentContent");
-		String boardWriter = request.getParameter("boardCommentWriter");
-		int boardLevel = Integer.parseInt(request.getParameter("boardCommentLevel"));
-		int commentRef = Integer.parseInt(request.getParameter("boardCommentRef"));
+//		System.out.println("tttttttttttttttttttttttttttttttt");
 		
-		BoardComment bc = new BoardComment(boardLevel, boardWriter, content, boardRef, commentRef);
+		int boardRef = Integer.parseInt(request.getParameter("board_ref"));
+		String writer = request.getParameter("writer");
+		int level = Integer.parseInt(request.getParameter("level"));
+		String content = request.getParameter("content");
+		int commetRef = Integer.parseInt(request.getParameter("commentRef"));
+		
+		BoardComment bc = new BoardComment(level, writer, content, boardRef, commetRef);
+//		System.out.println("bc   : " + bc);
 		int ck = new BoardService().insertComment(bc);
 		
 		String msg = "";
@@ -47,6 +50,7 @@ public class BoardCommentWriteServlet extends HttpServlet {
 		request.setAttribute("msg", msg);
 		request.setAttribute("local", local);
 		request.getRequestDispatcher(view).forward(request, response);
+		
 		
 	}
 
